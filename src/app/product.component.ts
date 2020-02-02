@@ -9,9 +9,11 @@ import { Product } from './product.model';
 })
 export class ProductComponent implements OnInit {
 
+  constructor() { }
+
   public model: Model = new Model();
 
-  constructor() { }
+  public targetName = 'Kayak';
 
   ngOnInit() {
   }
@@ -23,6 +25,18 @@ export class ProductComponent implements OnInit {
   getClassesByPosition(position: number): string {
     const product = this.getProductByPosition(position);
     return 'p-2 ' + (product.price < 50 ? 'bg-info' : 'bg-warning');
+  }
+
+  getProduct(key: number): Product {
+    return this.model.getProduct(key);
+  }
+
+  getProducts(): Product[] {
+    return this.model.getProducts();
+  }
+
+  getProductCount(): number {
+    return this.getProducts().length;
   }
 
 }
