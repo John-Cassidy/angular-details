@@ -1,3 +1,11 @@
+<ng-template #titleTemplate let-text="title">
+  <h4 class="p-2 bg-success text-white">{{text}}</h4>
+</ng-template>
+
+<ng-template [ngTemplateOutlet]="titleTemplate"
+             [ngTemplateOutletContext]="{title: 'Header'}">
+</ng-template>
+
 <div class="bg-primary">
   <h2>
     There are {{getProductCount()}} products.
@@ -20,7 +28,8 @@
     <th>Category</th>
     <th>Price</th>
   </tr>
-  <tr *ngFor="let item of getProducts(); let i = index; let odd = odd; let first = first; let last = last"
+  <tr *ngFor="let item of getProducts(); let i = index;
+  let odd = odd; let first = first; let last = last; trackBy:getKey"
     [class.bg-primary]="odd" [class.bg-info]="!odd" [class.bg-warning]="first || last">
     <td>{{ i + 1}}</td>
     <td>{{item.name}}</td>
@@ -28,3 +37,11 @@
     <td>{{item.price | currency}}</td>
   </tr>
 </table>
+
+<div>
+  <input type="button" (click)="swapProduct()" value="Swap Product"/>
+</div>
+
+<ng-template [ngTemplateOutlet]="titleTemplate"
+[ngTemplateOutletContext]="{title: 'Footer'}">
+</ng-template>

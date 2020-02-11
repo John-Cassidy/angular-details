@@ -12,7 +12,7 @@ export class ProductComponent implements OnInit {
   constructor() { }
 
   public model: Model = new Model();
-
+  public counter = 1;
   public targetName = 'Kayak';
 
   ngOnInit() {
@@ -39,4 +39,19 @@ export class ProductComponent implements OnInit {
     return this.getProducts().length;
   }
 
+  swapProduct() {
+    this.model.swapProduct();
+  }
+
+  get nextProduct(): Product {
+      return this.model.getProducts().shift();
+  }
+
+  getKey(index: number, product: Product) {
+      return product.id;
+  }
+
+  getProductPrice(index: number): number {
+      return Math.floor(this.getProduct(index).price);
+  }
 }
