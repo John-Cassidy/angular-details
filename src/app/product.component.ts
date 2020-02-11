@@ -14,17 +14,9 @@ export class ProductComponent implements OnInit {
   public model: Model = new Model();
   public counter = 1;
   public targetName = 'Kayak';
+  public selectedProduct: string;
 
   ngOnInit() {
-  }
-
-  getProductByPosition(position: number): Product {
-    return this.model.getProducts()[position];
-  }
-
-  getClassesByPosition(position: number): string {
-    const product = this.getProductByPosition(position);
-    return 'p-2 ' + (product.price < 50 ? 'bg-info' : 'bg-warning');
   }
 
   getProduct(key: number): Product {
@@ -39,8 +31,8 @@ export class ProductComponent implements OnInit {
     return this.getProducts().length;
   }
 
-  swapProduct() {
-    this.model.swapProduct();
+  getSelected(product: Product): boolean {
+    return product.name === this.selectedProduct;
   }
 
   get nextProduct(): Product {
