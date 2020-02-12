@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Model } from './repository.model';
 import { Product } from './product.model';
+import { ProductFormGroup } from './form.model';
 
 @Component({
   selector: 'app-product',
@@ -11,12 +13,22 @@ export class ProductComponent implements OnInit {
 
   constructor() { }
 
-  public model: Model = new Model();
-  public counter = 1;
-  public targetName = 'Kayak';
-  public selectedProduct: string;
+  model: Model = new Model();
+  form: ProductFormGroup = new ProductFormGroup();
+  // tslint:disable-next-line: no-inferrable-types
+  formSubmitted: boolean = false;
+  newProduct: Product = new Product();
+  counter = 1;
 
   ngOnInit() {
+  }
+
+  getProductCount(): number {
+    return this.getProducts().length;
+  }
+
+  get jsonProduct() {
+    return JSON.stringify(this.newProduct);
   }
 
   getProduct(key: number): Product {
@@ -27,23 +39,21 @@ export class ProductComponent implements OnInit {
     return this.model.getProducts();
   }
 
-  getProductCount(): number {
-    return this.getProducts().length;
+  addProduct(p: Product) {
+    console.log('New Product: ' + this.jsonProduct);
+    this.model.saveProduct(p);
   }
 
-  getSelected(product: Product): boolean {
-    return product.name === this.selectedProduct;
-  }
-
-  get nextProduct(): Product {
-      return this.model.getProducts().shift();
-  }
-
-  getKey(index: number, product: Product) {
-      return product.id;
-  }
-
-  getProductPrice(index: number): number {
-      return Math.floor(this.getProduct(index).price);
+  submitForm(form: NgForm) {
+    this.form.productControls.forEach(
+      c => (this.newProduct[c.modelProperty] = c.value)
+    );
+    this.formSubmitted = true;
+    if (form.valid) {
+      this.addProduct(this.newProduct);
+      this.newProduct = new Product();
+      form.reset();
+      this.formSubmitted = false;
+    }
   }
 }

@@ -1,3 +1,12 @@
+<style>
+  input.ng-dirty.ng-invalid {
+    border: 2px solid #ff0000;
+  }
+  input.ng-dirty.ng-valid {
+    border: 2px solid #6bc502;
+  }
+</style>
+
 <ng-template #titleTemplate let-text="title">
   <h4 class="p-2 bg-success text-white">{{ text }}</h4>
 </ng-template>
@@ -13,9 +22,6 @@
 </div>
 
 <div class="m-2">
-  <div class="bg-info text-white p-2">
-    Selected Product: {{ selectedProduct || '(None)' }}
-  </div>
   <table class="table table-sm table-bordered mt-1 text-dark">
     <tr class="text-dark">
       <th></th>
@@ -29,22 +35,55 @@
         let i = index;
         let odd = odd;
         let first = first;
-        let last = last;
-        trackBy: getKey
+        let last = last
       "
-      [class.bg-info]="getSelected(item)"
     >
-      <td (mouseover)="selectedProduct=item.name">{{ i + 1 }}</td>
+      <td>{{ i + 1 }}</td>
       <td>{{ item.name }}</td>
       <td>{{ item.category }}</td>
       <td>{{ item.price | currency }}</td>
     </tr>
   </table>
 </div>
-<div class="form-group">
-  <label>Product Name</label>
-  <input class="form-control" (input)="selectedProduct=$event.target.value" />
-</div>
+
+<ng-template
+  [ngTemplateOutlet]="titleTemplate"
+  [ngTemplateOutletContext]="{ title: 'Add Another Product' }"
+>
+</ng-template>
+
+<form class="m-2" novalidate [formGroup]="form" (ngSubmit)="submitForm(form)">
+
+  <div class="bg-danger text-white p-2 mb-2" *ngIf="formSubmitted && form.invalid">
+      There are problems with the form
+      <ul>
+          <li *ngFor="let error of form.getFormValidationMessages()">
+              {{error}}
+          </li>
+      </ul>
+  </div>
+
+  <div class="form-group" *ngFor="let control of form.productControls">
+      <label>{{control.label}}</label>
+      <input class="form-control"
+          name="{{control.modelProperty}}"
+          formControlName="{{control.modelProperty}}" />
+      <ul class="text-danger list-unstyled"
+              *ngIf="(formSubmitted || control.dirty) && control.invalid">
+          <li *ngFor="let error of control.getValidationMessages()">
+              {{error}}
+          </li>
+      </ul>
+  </div>
+
+  <button class="btn btn-primary" type="submit"
+      [disabled]="formSubmitted || form.invalid"
+      [class.btn-secondary]="formSubmitted && form.invalid">
+          Create
+  </button>
+</form>
+
+<div class="bg-info text-white mb-2 p-2">Model Data: {{jsonProduct}}</div>
 
 <ng-template
   [ngTemplateOutlet]="titleTemplate"
