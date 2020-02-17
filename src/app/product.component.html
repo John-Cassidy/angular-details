@@ -21,69 +21,83 @@
   <h2>There are {{ getProductCount() }} products.</h2>
 </div>
 
-<div class="m-2">
-  <table class="table table-sm table-bordered mt-1 text-dark">
-    <tr class="text-dark">
-      <th></th>
-      <th>Name</th>
-      <th>Category</th>
-      <th>Price</th>
-    </tr>
-    <tr
-      *ngFor="
-        let item of getProducts();
-        let i = index;
-        let odd = odd;
-        let first = first;
-        let last = last
-      "
+<div class="row m-2">
+  <div class="col-6">
+    <form
+      class="m-2"
+      novalidate
+      [formGroup]="form"
+      (ngSubmit)="submitForm(form)"
     >
-      <td>{{ i + 1 }}</td>
-      <td>{{ item.name }}</td>
-      <td>{{ item.category }}</td>
-      <td>{{ item.price | currency }}</td>
-    </tr>
-  </table>
-</div>
-
-<ng-template
-  [ngTemplateOutlet]="titleTemplate"
-  [ngTemplateOutletContext]="{ title: 'Add Another Product' }"
->
-</ng-template>
-
-<form class="m-2" novalidate [formGroup]="form" (ngSubmit)="submitForm(form)">
-
-  <div class="bg-danger text-white p-2 mb-2" *ngIf="formSubmitted && form.invalid">
-      There are problems with the form
-      <ul>
+      <div
+        class="bg-danger text-white p-2 mb-2"
+        *ngIf="formSubmitted && form.invalid"
+      >
+        There are problems with the form
+        <ul>
           <li *ngFor="let error of form.getFormValidationMessages()">
-              {{error}}
+            {{ error }}
           </li>
-      </ul>
-  </div>
+        </ul>
+      </div>
 
-  <div class="form-group" *ngFor="let control of form.productControls">
-      <label>{{control.label}}</label>
-      <input class="form-control"
-          name="{{control.modelProperty}}"
-          formControlName="{{control.modelProperty}}" />
-      <ul class="text-danger list-unstyled"
-              *ngIf="(formSubmitted || control.dirty) && control.invalid">
+      <div class="form-group" *ngFor="let control of form.productControls">
+        <label>{{ control.label }}</label>
+        <input
+          class="form-control"
+          [(ngModel)]="newProduct[control.modelProperty]"
+          name="{{ control.modelProperty }}"
+          formControlName="{{ control.modelProperty }}"
+        />
+        <ul
+          class="text-danger list-unstyled"
+          *ngIf="(formSubmitted || control.dirty) && control.invalid"
+        >
           <li *ngFor="let error of control.getValidationMessages()">
-              {{error}}
+            {{ error }}
           </li>
-      </ul>
+        </ul>
+      </div>
+
+      <button
+        class="btn btn-primary"
+        type="submit"
+        [disabled]="formSubmitted || form.invalid"
+        [class.btn-secondary]="formSubmitted && form.invalid"
+      >
+        Create
+      </button>
+    </form>
+
+    <div class="bg-info text-white mb-2 p-2">Model Data: {{ jsonProduct }}</div>
   </div>
-
-  <button class="btn btn-primary" type="submit"
-      [disabled]="formSubmitted || form.invalid"
-      [class.btn-secondary]="formSubmitted && form.invalid">
-          Create
-  </button>
-</form>
-
-<div class="bg-info text-white mb-2 p-2">Model Data: {{jsonProduct}}</div>
+  <div class="col-6">
+    <div class="m-2">
+      <table class="table table-sm table-bordered mt-1 text-dark">
+        <tr class="text-dark">
+          <th></th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Price</th>
+        </tr>
+        <tr
+          *ngFor="
+            let item of getProducts();
+            let i = index;
+            let odd = odd;
+            let first = first;
+            let last = last
+          "
+          pa-attr>
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.name }}</td>
+          <td pa-attr="bg-warning">{{ item.category }}</td>
+          <td pa-attr="bg-info">{{ item.price | currency }}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
 
 <ng-template
   [ngTemplateOutlet]="titleTemplate"
