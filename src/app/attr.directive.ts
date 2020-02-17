@@ -1,6 +1,6 @@
 import {
   Directive, ElementRef, Attribute, Input,
-  SimpleChange, Output, EventEmitter, HostListener, HostBinding
+  SimpleChange, Output, EventEmitter, HostListener, HostBinding, OnInit, OnChanges
 } from '@angular/core';
 import { Product } from './product.model';
 
@@ -8,24 +8,47 @@ import { Product } from './product.model';
   // tslint:disable-next-line: directive-selector
   selector: '[pa-attr]'
 })
-export class PaAttrDirective {
+export class PaAttrDirective implements OnInit, OnChanges {
 
-  constructor(element: ElementRef, @Attribute('pa-attr') bgClass: string) {
-    element.nativeElement.classList.add(bgClass || 'bg-success', 'text-white');
+
+  constructor(private element: ElementRef) {
+    this.element.nativeElement.addEventListener('click', e => {
+      if (this.product !== null) {
+        this.click.emit(this.product.category);
+      }
+    });
   }
 
-  // @Input('pa-attr')
+  @Input('pa-attr')
   // @HostBinding('class')
-  // bgClass: string;
+  bgClass: string;
 
-  // // tslint:disable-next-line: no-input-rename
-  // @Input('pa-product')
-  // product: Product;
+  // tslint:disable-next-line: no-input-rename
+  @Input('pa-product')
+  product: Product;
+
+  // tslint:disable-next-line: no-output-rename
+  @Output('pa-category')
+  click = new EventEmitter<string>();
 
   // // tslint:disable-next-line: no-output-rename
   // @Output('pa-category')
   // click = new EventEmitter<string>();
 
+  ngOnInit(): void {
+    this.element.nativeElement.classList.add(this.bgClass || 'bg-success');
+  }
+  ngOnChanges(changes: {[property: string]: SimpleChange }): void {
+    let change = changes.bgClass;
+    let classList = this.element.nativeElement.classList;
+
+    if (!change.isFirstChange() && classList.contains(change.previousValue)) {
+      classList.remove(change.previousValue);
+    }
+    if (!classList.contains(change.currentValue)) {
+      classList.add(change.currentValue);
+    }
+  }
   // @HostListener('click')
   // triggerCustomEvent() {
   //     if (this.product != null) {

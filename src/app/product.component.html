@@ -88,11 +88,12 @@
             let first = first;
             let last = last
           "
-          pa-attr>
+          [pa-attr]="getProducts().length < 6 ? 'bg-success' : 'bg-warning'"
+          [pa-product]="item" (pa-category)="newProduct.category=$event">
           <td>{{ i + 1 }}</td>
           <td>{{ item.name }}</td>
-          <td pa-attr="bg-warning">{{ item.category }}</td>
-          <td pa-attr="bg-info">{{ item.price | currency }}</td>
+          <td [pa-attr]="item.category == 'Soccer' ? 'bg-info' : null">{{ item.category }}</td>
+          <td [pa-attr]="'bg-info'">{{ item.price | currency }}</td>
         </tr>
       </table>
     </div>
