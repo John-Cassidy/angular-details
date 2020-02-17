@@ -12,15 +12,11 @@ export class PaAttrDirective implements OnInit, OnChanges {
 
 
   constructor(private element: ElementRef) {
-    this.element.nativeElement.addEventListener('click', e => {
-      if (this.product !== null) {
-        this.click.emit(this.product.category);
-      }
-    });
+
   }
 
   @Input('pa-attr')
-  // @HostBinding('class')
+  @HostBinding('class')
   bgClass: string;
 
   // tslint:disable-next-line: no-input-rename
@@ -49,10 +45,11 @@ export class PaAttrDirective implements OnInit, OnChanges {
       classList.add(change.currentValue);
     }
   }
-  // @HostListener('click')
-  // triggerCustomEvent() {
-  //     if (this.product != null) {
-  //         this.click.emit(this.product.category);
-  //     }
-  // }
+
+  @HostListener('click')
+    triggerCustomEvent() {
+        if (this.product != null) {
+            this.click.emit(this.product.category);
+        }
+    }
 }

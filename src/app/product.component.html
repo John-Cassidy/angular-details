@@ -73,6 +73,18 @@
   </div>
   <div class="col-6">
     <div class="m-2">
+      <div class="form-group bg-info text-white p-2">
+        <label>Name:</label>
+        <input
+          class="bg-primary text-white"
+          [(paModel)]="newProduct.name"
+          #paModel="paModel"
+        />
+        <div class="bg-primary text-white">
+          Direction: {{ paModel.direction }}
+        </div>
+      </div>
+
       <table class="table table-sm table-bordered mt-1 text-dark">
         <tr class="text-dark">
           <th></th>
@@ -89,10 +101,14 @@
             let last = last
           "
           [pa-attr]="getProducts().length < 6 ? 'bg-success' : 'bg-warning'"
-          [pa-product]="item" (pa-category)="newProduct.category=$event">
+          [pa-product]="item"
+          (pa-category)="newProduct.category = $event"
+        >
           <td>{{ i + 1 }}</td>
           <td>{{ item.name }}</td>
-          <td [pa-attr]="item.category == 'Soccer' ? 'bg-info' : null">{{ item.category }}</td>
+          <td [pa-attr]="item.category == 'Soccer' ? 'bg-info' : null">
+            {{ item.category }}
+          </td>
           <td [pa-attr]="'bg-info'">{{ item.price | currency }}</td>
         </tr>
       </table>
