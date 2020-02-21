@@ -1,27 +1,16 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { ProductComponent } from './product.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { PaAttrDirective } from './attr.directive';
-import { PaModel } from './twoway.directive';
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { ProductComponent } from "./component";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { ProductTableComponent } from "./components/productTable.component";
+import { ProductFormComponent } from "./components/productForm.component";
+import { ModelModule } from "./model/model.module";
+import { CommonModule } from "./common/common.module";
+import { ComponentsModule } from "./components/components.module";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ProductComponent,
-    PaAttrDirective,
-    PaModel
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
-  providers: [],
-  bootstrap: [ProductComponent]
+    imports: [BrowserModule, FormsModule, ReactiveFormsModule,
+        ModelModule, CommonModule, ComponentsModule],
+    bootstrap: [ProductFormComponent, ProductTableComponent]
 })
 export class AppModule { }
